@@ -1,0 +1,32 @@
+import streamlit as st
+import plotly.express as px
+from src.functions.data_wrangling import preprocess_data
+from src.functions.analysis import get_incident_reasons
+from src.utils.components import create_sidebar
+from src.utils.excel_exporter import export_incidents
+from src.config.settings import REQUESTS_CONFIG, FONT_STYLE, TITLE_STYLE
+
+
+@st.cache_data
+def load_data():
+    return preprocess_data("./data/Reports_Monitoring_Semanal.xlsx", REQUESTS_CONFIG)
+
+
+df = load_data()
+
+st.set_page_config(layout="wide")
+st.title("📊 Relatório Requisições")
+
+if not df.empty:
+    df_filtered, _ = create_sidebar(df)
+
+    df_grouped = (
+        df_filtered.groupby(["Ano", "Mes", "CI"])
+        .size()
+        .reset_index(name="Qtd. Tickets")
+        .sort_values(by="Qtd. Tickets", ascending=False)
+    )
+
+    st.subheader("🔎 Ocorrências por Mês")
+    fig_bar = px.bar(df_grouped.head(15), x="CI", y="Qtd. Tickets")
+    st.plotly_chart(fig_bar)
