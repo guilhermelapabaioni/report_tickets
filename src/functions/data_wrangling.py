@@ -88,7 +88,7 @@ def recover_generic_ci(df):
     ]
     regex_pattern = r"((?:" + "|".join(prefixes_ci) + r")[a-zA-Z0-9_-]+)"
 
-    extract_ci = df.loc[mask_generic, "Descricao Incidente"].str.extract(
+    extract_ci = df.loc[mask_generic, ("Descricao Incidente" and "Descricao Request")].str.extract(
         regex_pattern, flags=re.IGNORECASE, expand=False
     )
 

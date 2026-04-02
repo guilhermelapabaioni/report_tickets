@@ -28,5 +28,62 @@ if not df.empty:
     )
 
     st.subheader("🔎 Ocorrências por Mês")
-    fig_bar = px.bar(df_grouped.head(15), x="CI", y="Qtd. Tickets")
-    st.plotly_chart(fig_bar)
+    fig_bar = px.bar(
+        df_grouped.head(15), 
+        x="CI", 
+        y="Qtd. Tickets", 
+        color="Qtd. Tickets",
+        text_auto=True,
+        color_continuous_scale="Reds",
+        hover_data=["Mes"],
+        labels={"Mes": "Mês", "CI": "Hostname (CI)", "Qtd. Tickets": "Tickets"},
+    )
+    
+    fig_bar.update_layout(
+        title_text="Incidentes por CI (Intensidade baseada em Volume)",
+        margin=dict(b=100),
+        coloraxis_showscale=False,
+        xaxis=dict(tickfont=FONT_STYLE, title_font=TITLE_STYLE),
+        yaxis=dict(tickfont=FONT_STYLE, title_font=TITLE_STYLE),
+    )
+    
+    fig_bar.update_traces(textfont=FONT_STYLE)
+
+    fig_event = st.plotly_chart(
+        fig_bar, width="stretch", on_select="rerun", selection_mode="points"
+    )
+    
+    if fig_event and len(fig_event["selection"]["points"]) > 0:
+        selected_ci = fig_event["selection"]["points"][0]["x"]
+
+        st.success(f"🔍 Analisando Detalhes: **{selected_ci}**")
+
+        df_detalhes = df_filtered[df_filtered["CI"] == selected_ci]
+        
+        st.dataframe(
+            df_detalhes[['Request ID', 'CI', 'Descricao Request', 'Status', 'Horario de Abertura', 'Horario de Resolucao', 'Grupo de Resolucao']],
+            hide_index=True,
+            width="stretch",
+        )
+        export_incidents(
+            df_detalhes[
+                [
+                    "CI",
+                    "Request ID",
+                    "Descricao Request",
+                    "Horario de Abertura",
+                    "Horario de Resolucao",
+                    "Periodo",
+                    "Status",
+                    "Grupo de Resolucao",
+                ]
+            ]
+        )
+
+    else:
+        st.info("💡 **Dica:** Clique em uma barra para abrir o histórico detalhado.")
+        st.dataframe(
+            df_grouped[["CI","Qtd. Tickets"]].head(15),
+            hide_index=True,
+            width="stretch",
+        )
