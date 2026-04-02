@@ -5,6 +5,7 @@ from src.functions.analysis import get_incident_reasons
 from src.utils.components import create_sidebar
 from src.utils.excel_exporter import export_incidents
 from src.config.settings import REQUESTS_CONFIG, FONT_STYLE, TITLE_STYLE
+from src.components.charts import plot_bar_chat
 
 
 @st.cache_data
@@ -28,26 +29,8 @@ if not df.empty:
     )
 
     st.subheader("🔎 Ocorrências por Mês")
-    fig_bar = px.bar(
-        df_grouped.head(15), 
-        x="CI", 
-        y="Qtd. Tickets", 
-        color="Qtd. Tickets",
-        text_auto=True,
-        color_continuous_scale="Reds",
-        hover_data=["Mes"],
-        labels={"Mes": "Mês", "CI": "Hostname (CI)", "Qtd. Tickets": "Tickets"},
-    )
-    
-    fig_bar.update_layout(
-        title_text="Incidentes por CI (Intensidade baseada em Volume)",
-        margin=dict(b=100),
-        coloraxis_showscale=False,
-        xaxis=dict(tickfont=FONT_STYLE, title_font=TITLE_STYLE),
-        yaxis=dict(tickfont=FONT_STYLE, title_font=TITLE_STYLE),
-    )
-    
-    fig_bar.update_traces(textfont=FONT_STYLE)
+    fig_bar = plot_bar_chat(df_grouped, x_axis='CI', y_axis='Qtd. Tickets', title='Test')
+
 
     fig_event = st.plotly_chart(
         fig_bar, width="stretch", on_select="rerun", selection_mode="points"
