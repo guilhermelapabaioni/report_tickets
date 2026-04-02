@@ -36,7 +36,7 @@ INCIDENTS_CONFIG = {
 REQUESTS_CONFIG = {
     "id": "REQUESTS_CONFIG",
     "rename_columns": {
-        "Title": "Descricao Incidente",
+        "Title": "Descricao Request",
         "Open Time\n(Timezone based)": "Horario de Abertura",
         "Open Group": "Grupo de Abertura",
         "Resolve Time\n(Timezone based)": "Horario de Resolucao",
@@ -55,6 +55,9 @@ REQUESTS_CONFIG = {
         "CI Type",
         "CI Location",
         "CI Environment",
+        "CI Subtype",
+        "CI Location.1",
+        "CI Environment.1",
         "Affected CI Name",
         "Affected CI ID",
         "Knowledge Candidate CI ID",
@@ -69,6 +72,7 @@ REQUESTS_CONFIG = {
         "Tag 6",
         "Call Code",
         "Reported Time\n(Timezone based)",
+        "Close Time\n(Timezone based)",
         "Solution ID",
         "Opened by Interface",
         "Interface Takeover Time (Timezone based)",

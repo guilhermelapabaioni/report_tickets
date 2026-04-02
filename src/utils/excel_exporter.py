@@ -52,25 +52,19 @@ def export_incidents(df):
         return None
 
     try:
-        # 1. Criação do Buffer (Evita salvar arquivos no servidor)
         output = BytesIO()
 
-        # 2. Nome do arquivo dinâmico
-        # Se houver apenas um CI, usamos o nome dele. Se houver vários, usamos 'Multiplos_CIs'
         ci_tag = df['CI'].iloc[0] if df['CI'].nunique() == 1 else "Consolidado"
         file_name = f"relatorio_incidentes_{ci_tag}.xlsx"
 
-        # 3. Escrita do Excel
         with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
             df.to_excel(writer, sheet_name='1. Incidentes', index=False)
 
-            # Ajuste automático de largura de colunas (Opcional, mas profissional)
             worksheet = writer.sheets['1. Incidentes']
             for i, col in enumerate(df.columns):
                 column_len = max(df[col].astype(str).str.len().max(), len(col)) + 2
                 worksheet.set_column(i, i, column_len)
 
-        # 4. Botão de Download do Streamlit
         st.download_button(
             label="📥 Baixar Relatório Excel",
             data=output.getvalue(),
@@ -81,3 +75,5 @@ def export_incidents(df):
     except Exception as e:
         st.error(f"Erro ao gerar o arquivo: {e}")
         st.info("Suporte: guilherme.baioni@t-systems.com")
+        
+    return df
