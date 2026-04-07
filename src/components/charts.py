@@ -35,3 +35,19 @@ def plot_bar_chart(df, x_axis, y_axis, **kwargs):
     )
 
     return fig
+
+
+def plot_pie_chart(df, names, values, **kwargs):
+    fig = px.pie(df, names, values, **kwargs)
+
+    fig.update_layout(
+        margin=dict(l=10, r=10, t=20, b=10),
+        legend=dict(
+            font=FONT_STYLE,
+            title_font=TITLE_STYLE,
+        ),
+    )
+
+    fig.update_traces(textfont=FONT_STYLE)
+
+    return fig

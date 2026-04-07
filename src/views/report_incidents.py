@@ -5,7 +5,7 @@ from src.functions.analysis import get_incident_reasons
 from src.utils.components import create_sidebar
 from src.utils.excel_exporter import export_incidents
 from src.config.settings import INCIDENTS_CONFIG, FONT_STYLE, TITLE_STYLE
-from src.components.charts import plot_bar_chart
+from src.components.charts import plot_pie_chart, plot_bar_chart
 from src.components.charts_events import event_bar_plot
 
 
@@ -38,23 +38,13 @@ if not df.empty:
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        fig_pie = px.pie(
+        fig_pie = plot_pie_chart(
             df_grouped,
-            values="Qtd. Tickets",
             names="Causa Incidente",
-            hole=0.3,
+            values="Qtd. Tickets",
+            title="Incidentes por Causa Raiz",
+            hole=0.4,
         )
-
-        fig_pie.update_layout(
-            title_text="Incidentes por Causa Raiz",
-            margin=dict(l=10, r=10, t=20, b=10),
-            legend=dict(
-                font=FONT_STYLE,  # Tamanho 16 e cor preta para os itens
-                title_font=TITLE_STYLE,  # Tamanho 20 para o título da legenda
-            ),
-        )
-
-        fig_pie.update_traces(textfont=FONT_STYLE)
 
         st.plotly_chart(fig_pie, width="stretch")
 
