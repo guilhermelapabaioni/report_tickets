@@ -22,13 +22,11 @@ def get_month(df):
         df["Mes"].unique(),
         key=lambda m: MONTHS_ORDER.index(m) if m in MONTHS_ORDER else 99,
     )
-
+    
     selected_months = st.sidebar.multiselect(
         "Mês do Incidente",
         available_months,
-        default=MONTH_MAP[
-            dt.now().month if MONTH_MAP[dt.now().month] in df["Mes"].values else None
-        ],
+        default=MONTH_MAP[dt.now().month] if MONTH_MAP[dt.now().month] in df["Mes"].values else None,
         placeholder="Todos os Meses",
         key="filter_month",
     )
