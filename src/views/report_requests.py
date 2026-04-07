@@ -1,9 +1,10 @@
 import streamlit as st
+import plotly.express as px
 from src.functions.data_wrangling import preprocess_data
 from src.utils.components import create_sidebar
 from src.utils.excel_exporter import export_incidents
-from src.config.settings import REQUESTS_CONFIG
-from src.components.charts import plot_bar_chat
+from src.config.settings import REQUESTS_CONFIG, FONT_STYLE, TITLE_STYLE
+from src.components.charts import plot_bar_chart
 from src.components.charts_events import event_bar_plot
 
 
@@ -30,7 +31,7 @@ if not df.empty:
     col1, col2 = st.columns([2, 1])
     st.subheader("🔎 Ocorrências por Mês")
     with col1:
-        fig_bar = plot_bar_chat(
+        fig_bar = plot_bar_chart(
             df_grouped.head(15),
             x_axis="CI",
             y_axis="Qtd. Tickets",

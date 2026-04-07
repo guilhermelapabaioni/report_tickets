@@ -5,7 +5,7 @@ from src.functions.analysis import get_incident_reasons
 from src.utils.components import create_sidebar
 from src.utils.excel_exporter import export_incidents
 from src.config.settings import INCIDENTS_CONFIG, FONT_STYLE, TITLE_STYLE
-from src.components.charts import plot_bar_chat
+from src.components.charts import plot_bar_chart
 from src.components.charts_events import event_bar_plot
 
 
@@ -69,7 +69,7 @@ if not df.empty:
     st.divider()
     st.subheader("⚠️ Top 15 Oferensores por Mês")
 
-    fig_bar = plot_bar_chat(
+    fig_bar = plot_bar_chart(
         df_grouped.head(15),
         x_axis="CI",
         y_axis="Qtd. Tickets",

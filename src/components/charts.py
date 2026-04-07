@@ -3,7 +3,7 @@ import plotly.express as px
 from src.config.settings import TITLE_STYLE, FONT_STYLE
 
 
-def plot_bar_chat(df, x_axis, y_axis, **kwargs):
+def plot_bar_chart(df, x_axis, y_axis, **kwargs):
     """
     Gera um gráfico de barras flexível.
     Qualquer argumento extra passado será enviado diretamente para o px.bar.
