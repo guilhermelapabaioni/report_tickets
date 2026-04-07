@@ -26,11 +26,9 @@ def get_month(df):
     selected_months = st.sidebar.multiselect(
         "Mês do Incidente",
         available_months,
-        default=(
-            [MONTH_MAP[dt.now().month]]
-            if MONTH_MAP[dt.now().month] in df["Mes"]
-            else []
-        ),
+        default=MONTH_MAP[
+            dt.now().month if MONTH_MAP[dt.now().month] in df["Mes"].values else None
+        ],
         placeholder="Todos os Meses",
         key="filter_month",
     )
@@ -67,7 +65,7 @@ def get_day(df):
 
 
 def reset_filters():
-    st.session_state["filter_year"] = [dt.now().year]
+    st.session_state["filter_year"] = []
     st.session_state["filter_month"] = []
     st.session_state["filter_ci"] = []
     st.session_state["filter_date"] = []
@@ -76,20 +74,23 @@ def reset_filters():
 def create_sidebar(df):
     st.sidebar.header("⚙️ Painel de Filtro")
     years = get_year(df)
-    df_temp = df[df["Ano"].isin(years)] if years else df
+    df_filtered = df[df["Ano"].isin(years)] if years else df
 
-    months = get_month(df_temp)
+    months = get_month(df_filtered)
     if months:
-        df_temp = df_temp[df_temp["Mes"].isin(months)]
+        df_filtered = df_filtered[df_filtered["Mes"].isin(months)]
 
-    days = get_day(df_temp)
+    days = get_day(df_filtered)
     if days:
-        df_temp = df_temp[df_temp["Dia"].isin(days)]
+        df_filtered = df_filtered[df_filtered["Dia"].isin(days)]
 
-    cis = get_ci(df_temp)
+    cis = get_ci(df_filtered)
     if cis:
-        df_temp = df_temp[df_temp["CI"].isin(cis)]
+        df_filtered = df_filtered[df_filtered["CI"].isin(cis)]
 
-    st.sidebar.button("Limpar Filtros", on_click=reset_filters)
+    st.sidebar.button(
+        "Limpar Filtros",
+        on_click=reset_filters,
+    )
 
-    return df_temp, (years, months, cis)
+    return df_filtered, (years, months, cis)
