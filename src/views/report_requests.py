@@ -31,16 +31,28 @@ if not df.empty:
             .reset_index(name="Qtd. Tickets")
             .sort_values(by="Qtd. Tickets", ascending=False)
         )
-        
-        fig_bar = plot_bar_chat(df_grouped, x_axis='CI', y_axis='Qtd. Tickets', title='Test')
-    
-    with col2:
-        st.dataframe(df_grouped, width='stretch', hide_index=True)
 
-    drill_config = ['Request ID', 'CI', 'Descricao Request', 'Status', 'Horario de Abertura', 'Horario de Resolucao']
+        fig_bar = plot_bar_chat(
+            df_grouped,
+            x_axis="CI",
+            y_axis="Qtd. Tickets",
+            title="Requests por CI (Intensidade baseada em Volume)",
+        )
+
+    with col2:
+        st.dataframe(df_grouped, width="stretch", hide_index=True)
+
+    drill_config = [
+        "Request ID",
+        "CI",
+        "Descricao Request",
+        "Status",
+        "Horario de Abertura",
+        "Horario de Resolucao",
+    ]
     event_bar_plot(
-        fig=fig_bar, 
-        df_full=df_filtered, 
+        fig=fig_bar,
+        df_full=df_filtered,
         config=drill_config,
-        export_func=export_incidents
+        export_func=export_incidents,
     )
