@@ -1,9 +1,8 @@
 import streamlit as st
-import plotly.express as px
 from src.functions.data_wrangling import preprocess_data
 from src.utils.components import create_sidebar
 from src.utils.excel_exporter import export_incidents
-from src.config.settings import REQUESTS_CONFIG, FONT_STYLE, TITLE_STYLE
+from src.config.settings import REQUESTS_CONFIG
 from src.components.charts import plot_bar_chart
 from src.components.charts_events import event_bar_plot
 
