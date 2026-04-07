@@ -5,6 +5,8 @@ from src.functions.analysis import get_incident_reasons
 from src.utils.components import create_sidebar
 from src.utils.excel_exporter import export_incidents
 from src.config.settings import INCIDENTS_CONFIG, FONT_STYLE, TITLE_STYLE
+from src.components.charts import plot_bar_chat
+from src.components.charts_events import event_bar_plot
 
 
 @st.cache_data
@@ -65,75 +67,22 @@ if not df.empty:
         )
 
     st.divider()
-
     st.subheader("⚠️ Top 15 Oferensores por Mês")
-    fig_bar = px.bar(
-        df_grouped.head(15),
-        x="CI",
-        y="Qtd. Tickets",
-        color="Qtd. Tickets",
-        text_auto=True,
-        color_continuous_scale="Reds",
-        hover_data=["Mes"],
-        labels={"Mes": "Mês", "CI": "Hostname (CI)", "Qtd. Tickets": "Tickets"},
+    fig_bar = plot_bar_chat(
+        df_grouped,
+        x_axis="CI",
+        y_axis="Qtd. Tickets",
+        title="Incidentes por CI (Intensidade baseada em Volume)",
     )
 
-    fig_bar.update_layout(
-        title_text="Incidentes por CI (Intensidade baseada em Volume)",
-        margin=dict(b=100),
-        coloraxis_showscale=False,
-        xaxis=dict(tickfont=FONT_STYLE, title_font=TITLE_STYLE),
-        yaxis=dict(tickfont=FONT_STYLE, title_font=TITLE_STYLE),
+    drill_config = [
+        "Ticket ID",
+        "CI",
+        "Descricao Incidente",
+        "Incident Status",
+        "Horario de Abertura",
+        "Horario de Resolucao",
+    ]
+    event_bar_plot(
+        fig_bar, df_full=df_filtered, config=drill_config, export_func=export_incidents
     )
-
-    fig_bar.update_traces(textfont=FONT_STYLE)
-
-    fig_event = st.plotly_chart(
-        fig_bar, width="stretch", on_select="rerun", selection_mode="points"
-    )
-
-    if fig_event and len(fig_event["selection"]["points"]) > 0:
-        selected_ci = fig_event["selection"]["points"][0]["x"]
-
-        st.success(f"🔍 Analisando Detalhes: **{selected_ci}**")
-
-        df_detalhes = df_filtered[df_filtered["CI"] == selected_ci]
-
-        export_incidents(
-            df_detalhes[
-                [
-                    "CI",
-                    "Ticket ID",
-                    "Descricao Incidente",
-                    "Horario de Abertura",
-                    "Horario de Resolucao",
-                    "Periodo",
-                    "Incident Status",
-                    "Grupo de Resolucao",
-                ]
-            ]
-        )
-
-        st.dataframe(
-            df_detalhes[
-                [
-                    "CI",
-                    "Ticket ID",
-                    "Descricao Incidente",
-                    "Horario de Abertura",
-                    "Horario de Resolucao",
-                    "Periodo",
-                    "Incident Status",
-                    "Grupo de Resolucao",
-                ]
-            ],
-            hide_index=True,
-            width="stretch",
-        )
-    else:
-        st.info("💡 **Dica:** Clique em uma barra para abrir o histórico detalhado.")
-        st.dataframe(
-            df_grouped[["CI", "Causa Incidente", "Qtd. Tickets"]].head(15),
-            hide_index=True,
-            width="stretch",
-        )
