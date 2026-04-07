@@ -1,6 +1,6 @@
 import streamlit as st
 from src.functions.data_wrangling import preprocess_data
-from src.utils.components import create_sidebar
+from src.utils.sidebar_filters import create_sidebar
 from src.utils.excel_exporter import export_incidents
 from src.config.settings import REQUESTS_CONFIG
 from src.components.charts import plot_bar_chart
