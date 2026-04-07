@@ -18,23 +18,25 @@ st.set_page_config(layout="wide")
 st.title("📊 Relatório Requisições")
 
 if not df.empty:
+    df_filtered, _ = create_sidebar(df)
+
+    df_grouped = (
+        df_filtered.groupby(["Ano", "Mes", "CI"])
+        .size()
+        .reset_index(name="Qtd. Tickets")
+        .sort_values(by="Qtd. Tickets", ascending=False)
+    )
+
     col1, col2 = st.columns([2, 1])
     st.subheader("🔎 Ocorrências por Mês")
     with col1:
-        df_filtered, _ = create_sidebar(df)
-
-        df_grouped = (
-            df_filtered.groupby(["Ano", "Mes", "CI"])
-            .size()
-            .reset_index(name="Qtd. Tickets")
-            .sort_values(by="Qtd. Tickets", ascending=False)
-        )
-
         fig_bar = plot_bar_chat(
-            df_grouped,
+            df_grouped.head(15),
             x_axis="CI",
             y_axis="Qtd. Tickets",
             title="Requests por CI (Intensidade baseada em Volume)",
+            hover_data=["Mes"],
+            labels={"Mes": "Mês", "CI": "Hostname"},
         )
 
     with col2:

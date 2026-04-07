@@ -68,11 +68,14 @@ if not df.empty:
 
     st.divider()
     st.subheader("⚠️ Top 15 Oferensores por Mês")
+
     fig_bar = plot_bar_chat(
-        df_grouped,
+        df_grouped.head(15),
         x_axis="CI",
         y_axis="Qtd. Tickets",
         title="Incidentes por CI (Intensidade baseada em Volume)",
+        hover_data=["Mes"],
+        labels={"Mes": "Mês", "CI": "Hostname"},
     )
 
     drill_config = [
