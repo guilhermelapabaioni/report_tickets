@@ -6,6 +6,7 @@ from src.utils.components import create_sidebar
 from src.utils.excel_exporter import export_incidents
 from src.config.settings import REQUESTS_CONFIG, FONT_STYLE, TITLE_STYLE
 from src.components.charts import plot_bar_chat
+from src.components.charts_events import event_bar_plot
 
 
 @st.cache_data
@@ -19,54 +20,27 @@ st.set_page_config(layout="wide")
 st.title("📊 Relatório Requisições")
 
 if not df.empty:
-    df_filtered, _ = create_sidebar(df)
-
-    df_grouped = (
-        df_filtered.groupby(["Ano", "Mes", "CI"])
-        .size()
-        .reset_index(name="Qtd. Tickets")
-        .sort_values(by="Qtd. Tickets", ascending=False)
-    )
-
+    col1, col2 = st.columns([2, 1])
     st.subheader("🔎 Ocorrências por Mês")
-    fig_bar = plot_bar_chat(df_grouped, x_axis='CI', y_axis='Qtd. Tickets', title='Test')
+    with col1:
+        df_filtered, _ = create_sidebar(df)
 
-
-    fig_event = st.plotly_chart(
-        fig_bar, width="stretch", on_select="rerun", selection_mode="points"
-    )
-    
-    if fig_event and len(fig_event["selection"]["points"]) > 0:
-        selected_ci = fig_event["selection"]["points"][0]["x"]
-
-        st.success(f"🔍 Analisando Detalhes: **{selected_ci}**")
-
-        df_detalhes = df_filtered[df_filtered["CI"] == selected_ci]
+        df_grouped = (
+            df_filtered.groupby(["Ano", "Mes", "CI"])
+            .size()
+            .reset_index(name="Qtd. Tickets")
+            .sort_values(by="Qtd. Tickets", ascending=False)
+        )
         
-        st.dataframe(
-            df_detalhes[['Request ID', 'CI', 'Descricao Request', 'Status', 'Horario de Abertura', 'Horario de Resolucao', 'Grupo de Resolucao']],
-            hide_index=True,
-            width="stretch",
-        )
-        export_incidents(
-            df_detalhes[
-                [
-                    "CI",
-                    "Request ID",
-                    "Descricao Request",
-                    "Horario de Abertura",
-                    "Horario de Resolucao",
-                    "Periodo",
-                    "Status",
-                    "Grupo de Resolucao",
-                ]
-            ]
-        )
+        fig_bar = plot_bar_chat(df_grouped, x_axis='CI', y_axis='Qtd. Tickets', title='Test')
+    
+    with col2:
+        st.dataframe(df_grouped, width='stretch', hide_index=True)
 
-    else:
-        st.info("💡 **Dica:** Clique em uma barra para abrir o histórico detalhado.")
-        st.dataframe(
-            df_grouped[["CI","Qtd. Tickets"]].head(15),
-            hide_index=True,
-            width="stretch",
-        )
+    drill_config = ['Request ID', 'CI', 'Descricao Request', 'Status', 'Horario de Abertura', 'Horario de Resolucao']
+    event_bar_plot(
+        fig=fig_bar, 
+        df_full=df_filtered, 
+        config=drill_config,
+        export_func=export_incidents
+    )
