@@ -1,4 +1,3 @@
-import streamlit as st
 import plotly.express as px
 from src.config.settings import TITLE_STYLE, FONT_STYLE
 
@@ -29,10 +28,6 @@ def plot_bar_chart(df, x_axis, y_axis, **kwargs):
     )
 
     fig.update_traces(textfont=FONT_STYLE, textangle=0, textposition="outside")
-
-    fig = st.plotly_chart(
-        fig, width="stretch", on_select="rerun", selection_mode="points"
-    )
 
     return fig
 
