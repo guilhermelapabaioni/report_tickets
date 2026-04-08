@@ -3,7 +3,7 @@
 INCIDENTS_CONFIG = {
     "id": "INCIDENTS_CONFIG",
     "rename_columns": {
-        "Title": "Descricao Incidente",
+        "Title": "Descricao Chamado",
         "Open Time @Timezone": "Horario de Abertura",
         "Open Group": "Grupo de Abertura",
         "Resolved Time @Timezone": "Horario de Resolucao",
@@ -36,7 +36,7 @@ INCIDENTS_CONFIG = {
 REQUESTS_CONFIG = {
     "id": "REQUESTS_CONFIG",
     "rename_columns": {
-        "Title": "Descricao Request",
+        "Title": "Descricao Chamado",
         "Open Time\n(Timezone based)": "Horario de Abertura",
         "Open Group": "Grupo de Abertura",
         "Resolve Time\n(Timezone based)": "Horario de Resolucao",
