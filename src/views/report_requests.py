@@ -18,7 +18,7 @@ st.set_page_config(layout="wide")
 st.title("📊 Relatório Requisições")
 
 if not df.empty:
-    df_filtered, _ = create_sidebar(df)
+    df_filtered = create_sidebar(df)
 
     df_grouped = (
         df_filtered.groupby(["Ano", "Mes", "CI"])

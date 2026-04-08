@@ -22,7 +22,7 @@ st.title("📊 Relatório Incidentes")
 
 
 if not df.empty:
-    df_filtered, _ = create_sidebar(df)
+    df_filtered = create_sidebar(df)
 
     df_processed = get_incident_reasons(df_filtered)
 
