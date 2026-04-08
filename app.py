@@ -2,7 +2,7 @@ import streamlit as st
 from src.utils.security import check_password
 
 st.set_page_config(
-    page_title="Monitoramento de Incidentes - T-Systems/VW",
+    page_title="Tickets Monitoring",
     layout="wide",
     page_icon="images/icon_tsystems.png",
 )
