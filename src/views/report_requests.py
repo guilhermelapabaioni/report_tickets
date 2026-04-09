@@ -77,6 +77,7 @@ if not df.empty:
     event_bar_plot(
         fig=fig_bar,
         df_full=df_filtered,
+        df_data=df_incident_reasons,
         config=drill_config,
         export_func=export_incidents,
     )
