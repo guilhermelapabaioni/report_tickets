@@ -38,6 +38,7 @@ if not df.empty:
             names="Causa Chamado",
             values="Qtd. Tickets",
             hole=0.4,
+            title="Requests por Causa Raiz",
         )
 
         st.plotly_chart(fig_pie, width="stretch")
