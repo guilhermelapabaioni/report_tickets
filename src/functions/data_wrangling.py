@@ -9,7 +9,9 @@ def preprocess_data(PATH, config):
     try:
         df = (
             pd.read_excel(
-                PATH, skiprows=(10 if config.get("id") == "INCIDENTS_CONFIG" else 3)
+                PATH,
+                skiprows=(10 if config.get("id") == "INCIDENTS_CONFIG" else 3),
+                engine="openpyxl",
             )
             .rename(columns=config.get("rename_columns"))
             .drop(columns=config.get("drop_columns"))
@@ -24,7 +26,6 @@ def preprocess_data(PATH, config):
 
 
 def preprocess_reports_data(PATH):
-    """ """
     try:
         df = pd.read_excel(PATH, skiprows=3).rename().drop()
 
