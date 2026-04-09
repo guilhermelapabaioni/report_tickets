@@ -1,7 +1,7 @@
 import streamlit as st
 
 
-def event_bar_plot(fig, df_full, config, export_func):
+def event_bar_plot(fig, df_full, df_data, config, export_func):
     if fig and len(fig["selection"]["points"]) > 0:
         selected_ci = fig["selection"]["points"][0]["x"]
 
@@ -18,6 +18,6 @@ def event_bar_plot(fig, df_full, config, export_func):
         )
     else:
         st.info("💡 **Dica:** Clique em uma barra para abrir o histórico detalhado.")
-        export_func(df_full[config])
+        export_func(df_data)
 
-        st.dataframe(df_full[config], hide_index=True, width="stretch")
+        st.dataframe(df_data, hide_index=True, width="stretch")
