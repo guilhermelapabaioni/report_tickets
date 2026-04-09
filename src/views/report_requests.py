@@ -68,7 +68,7 @@ if not df.empty:
     )
 
     drill_config = [
-        "Request ID",
+        "N ° Chamado",
         "CI",
         "Descricao Chamado",
         "Status",

@@ -62,11 +62,23 @@ def get_ci(df):
     return selected_cis
 
 
+def get_ticket_number(df):
+    selected_tickets = st.sidebar.multiselect(
+        "N° do Chamado",
+        df["N° Chamado"],
+        placeholder="Todos os Chamados",
+        key="filter_ticket",
+    )
+
+    return selected_tickets
+
+
 def reset_filters():
     st.session_state["filter_date_range"] = []
     st.session_state["filter_year"] = [dt.now().year]
     st.session_state["filter_month"] = [MONTH_MAP[dt.now().month]]
     st.session_state["filter_ci"] = []
+    st.session_state["filter_ticket"] = []
 
 
 def create_sidebar(df):
@@ -95,6 +107,10 @@ def create_sidebar(df):
     cis = get_ci(df)
     if cis:
         df = df[df["CI"].isin(cis)]
+
+    tickets = get_ticket_number(df)
+    if tickets:
+        df = df[df["N° Chamado"].isin(tickets)]
 
     st.sidebar.button(
         "Limpar Filtros",
